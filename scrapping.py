@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = 'https://www.domusbasto.com/imoveis/'  # Replace with the URL you want to scrape
+url = 'https://www.domusbasto.com/imoveis/' 
 
 params = {
     'bus': 1,  #'Venda'
