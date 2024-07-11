@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import json
 
 url = 'https://www.domusbasto.com' 
 
@@ -21,6 +22,10 @@ properties = soup.find(id='PROPERTIES_LIST')
 
 pagination =  soup.find(class_ = 'pagination')
 
+page_data = {}
+full_data = {}
+data = {}
+
 while pagination:
 
     # Update the page number in params
@@ -35,12 +40,14 @@ while pagination:
     properties = soup.find(id='PROPERTIES_LIST')
 
     details_list = properties.find_all('span', id='details')
+    page_data = {}
+    data = {}
 
-    for details in details_list:
+    for index,details in enumerate(details_list):
         terreno_response = requests.get(url + details.a['href'])
         soup_terreno = BeautifulSoup(terreno_response.content, 'html.parser')
-        price = soup_terreno.find('span', class_='value notranslate')
-        print(price.text)
+        price = soup_terreno.find('span', class_='value notranslate').text
+        print(price)
 
         detailRow_district = soup_terreno.find(class_='detailRow distrito')
         district = detailRow_district.find(class_='value').text
@@ -61,16 +68,34 @@ while pagination:
                 area = area.replace("ha", "").replace(",", ".")
                 area = float(area)
                 area = area * 10000
-                print(str(area) + ' m²')
-                continue
+                #print(str(area) + ' m²')
+                #continue
             print(area)
         else :
-            print('None')
+            area = 'None'
+            print(area)
+        
+        data = {
+            'price': price,
+            'district': district,
+            'freguesia': freguesia,
+            'reference': referencia,
+            'area': area
+        }
+
+        page_data[index] = data
         
         print( " *********** ******* ********** ")
+    
+    full_data[page] = page_data
 
     # Next page
     page += 1
     pagination =  soup.find(class_ = 'pagination')
+
+# Convert to JSON string
+json_data = json.dumps(full_data, ensure_ascii=False, indent=4)
+
+print(json_data)
     
 
