@@ -1,5 +1,3 @@
-import time
-import json
 import logging
 import scrapping
 from confluent_kafka import Producer
@@ -26,7 +24,7 @@ def main():
 
     # Produce a message
     topic = 'test_topic'
-    message = 'Hello Kafka!'
+    message = get_data()
 
     # Produce the message asynchronously with the callback
     producer.produce(topic, key=None, value=message, callback=delivery_report)

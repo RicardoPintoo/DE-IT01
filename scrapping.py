@@ -89,6 +89,8 @@ def scrapping():
             #print( " *********** ******* ********** ")
         
         full_data[page] = page_data
+        #print("PAGE : " + str(page))
+        #print(page_data)
 
         # Next page
         page += 1
@@ -96,9 +98,14 @@ def scrapping():
 
     # Convert to JSON string
     json_data = json.dumps(full_data, ensure_ascii=False, indent=4)
+    #print(json_data)
 
     return json_data
 
-#print(json_data)
+scrapping()
+
+
+    
+
     
 
